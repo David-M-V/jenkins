@@ -1,0 +1,24 @@
+job('ejemplo-job-DSL') {
+  description('Job DSL de ejemplo 1')
+  scm {
+    git('https://github.com/macloujulian/jenkins.job.parametrizado.git', 'main') {
+      node / gitConfigName ('David-M-V')
+      node / gitConfigEmail ('martinez1430@hotmail.com')
+    }
+    parameters{
+      stringParam('nombre', defaultValue = 'David', description = 'Parametro de cadena para el job booleano')
+      choiceParam('planeta', ['Mercurio', 'Venus', 'La Tierra','Marte', 'Jupiter'])
+      booleanParam('agente', false)
+    }
+    triggers{
+      cron('H/7 * * * *')
+      githubPush()
+    }
+    steps{
+      shell ("bash jobscript.sh")
+    }
+    publishers{
+      mailer('martinez1430@hotmail.com', true, true)
+    }
+  }
+}
